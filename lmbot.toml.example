@@ -1,0 +1,24 @@
+[general]
+threads_limit = 8
+thread_wait_limit = 30
+loglevel = 2
+
+[bot]
+enabled = true
+token = "BOT_TOKEN"
+webhook_url = "https://your.bot.domain"
+port = 7771
+
+[auth]
+mode = 0
+admin = YOUR_ID
+service = SERVICE_GROUP_ID
+ids = [ AUTHORIZED, IDS, LIST ]
+
+[chat_helper]
+cleaner_sleeptime = 30
+
+[animation_converter] 
+video_path = "AnimationConverter/Videos"
+animation_path = "AnimationConverter/Gifs"
+converter_command = "AnimationConverter/mp42gif.sh"

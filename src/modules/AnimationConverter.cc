@@ -1,0 +1,52 @@
+#include "AnimationConverter.h"
+
+#include "LMBot.h"
+
+namespace lmb
+{
+    namespace modules
+    {
+
+        AnimationConverter::AnimationConverter()
+        {
+            video_path = bot->config->getParameter("animation_converter.video_path", "AnimationConverter/Videos");
+            animation_path = bot->config->getParameter("animation_converter.animation_path", "AnimationConverter/Gifs");
+            converter_command = bot->config->getParameter("animation_converter.converter_command", "AnimationConverter/mp42gif.sh");
+        }
+
+        void AnimationConverter::processMessage(TgBot::Message::Ptr message)
+        {
+            bot->tgbot->getApi().sendMessage(message->chat->id, "Received video, do conversion to gif");
+            std::string animation_file_path = bot->modules->animation_converter->doConversion(message->video->fileId);
+            TgBot::InputFile::Ptr animation_file = TgBot::InputFile::fromFile(animation_file_path, "image/gif");
+            bot->tgbot->getApi().sendAnimation(message->chat->id, animation_file);
+        }
+
+        const std::string AnimationConverter::doConversion(const std::string &video_file_id)
+        {
+            bool video_file_downloaded = false;
+            auto now = std::chrono::system_clock::now();
+            auto in_time_t = std::chrono::system_clock::to_time_t(now);
+            std::stringstream ss;
+            ss << std::put_time(std::localtime(&in_time_t), "%Y%m%d-%H%M%S");
+            const std::string filename_time = ss.str() + "_" + video_file_id;
+            const std::string video_file_path = video_path + "/" + filename_time + video_extention;
+            const std::string animation_file_path = animation_path + filename_time + animation_extention;
+            std::fstream video_file;
+            video_file.open(video_file_path, std::fstream::out);
+            if (video_file.is_open())
+            {
+                video_file << downloadFile(bot->tgbot, video_file_id);
+                video_file_downloaded = true;
+                video_file.close();
+            }
+            if (video_file_downloaded)
+            {
+                const std::string full_command = converter_command + " " + video_file_path + " " + animation_file_path;
+                system(full_command.c_str());
+            }
+            return animation_file_path;
+        }
+
+    } // namespace modules
+} // namespace lmb

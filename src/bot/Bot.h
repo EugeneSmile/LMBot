@@ -1,9 +1,12 @@
-#ifndef LMB_BOT_BOT_H_GUARD
-#define LMB_BOT_BOT_H_GUARD
+#ifndef LMBOT_BOT_BOT_H_GUARD
+#define LMBOT_BOT_BOT_H_GUARD
 
 #include <memory>
 
-namespace lmb
+#include <spdlog/spdlog.h>
+#include <spdlog/async_logger.h>
+
+namespace lmbot
 {
     class LMBot;
     namespace bot
@@ -11,10 +14,11 @@ namespace lmb
         class Bot
         {
         protected:
-            inline static std::shared_ptr<lmb::LMBot> bot;
+            std::shared_ptr<spdlog::async_logger> logger;
+            inline static std::shared_ptr<lmbot::LMBot> bot;
 
         public:
-            static void init(std::shared_ptr<lmb::LMBot> bot);
+            static void init(std::shared_ptr<lmbot::LMBot> bot);
         };
     } // namespace bot
 } // namespace lykomebot

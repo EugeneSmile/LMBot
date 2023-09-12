@@ -4,7 +4,7 @@
 
 #include "LMBot.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace managers
     {
@@ -13,4 +13,4 @@ namespace lmb
         }
 
     } // namespace managers
-} // namespace lmb
+} // namespace lmbot

@@ -1,5 +1,5 @@
-#ifndef LMB_CONFIGWRAPPER_H_GUARD
-#define LMB_CONFIGWRAPPER_H_GUARD
+#ifndef LMBOT_CONFIGWRAPPER_H_GUARD
+#define LMBOT_CONFIGWRAPPER_H_GUARD
 
 #include <string>
 #include <vector>
@@ -14,7 +14,9 @@
 #include <toml++/toml.h>
 #include <spdlog/spdlog.h>
 
-namespace lmb
+#include "Bot.h"
+
+namespace lmbot
 {
     template <typename T, typename... U>
     concept IsAnyOf = (std::same_as<T, U> || ...);
@@ -56,7 +58,7 @@ namespace lmb
         operator std::shared_ptr<T>() const { return value; };
     };
 
-    class ConfigWrapper
+    class ConfigWrapper : public bot::Bot
     {
     private:
         std::string filename;
@@ -141,5 +143,5 @@ namespace lmb
             config.insert_or_assign(name, value);
         }
     };
-} // namespace lmb
+} // namespace lmbot
 #endif

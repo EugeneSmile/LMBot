@@ -1,5 +1,5 @@
-#ifndef LMB_MANAGERS_CALLBACKQUERY_H_GUARD
-#define LMB_MANAGERS_CALLBACKQUERY_H_GUARD
+#ifndef LMBOT_MANAGERS_CALLBACKQUERY_H_GUARD
+#define LMBOT_MANAGERS_CALLBACKQUERY_H_GUARD
 
 #include <string>
 #include <vector>
@@ -8,7 +8,7 @@
 
 #include "Manager.h"
 
-namespace lmb
+namespace lmbot
 {
     class LMBot;
     namespace managers
@@ -21,6 +21,6 @@ namespace lmb
         };
 
     } // namespace managers
-} // namespace lmb
+} // namespace lmbot
 
 #endif

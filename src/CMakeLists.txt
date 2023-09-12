@@ -29,11 +29,13 @@ set(BOT_DEPENDENCIES TgBot spdlog cxxopts tomlplusplus::tomlplusplus)
 
 file(GLOB_RECURSE src_bot bot/*.cc bot/*.h)
 file(GLOB_RECURSE src_managers managers/*.cc managers/*.h)
-file(GLOB_RECURSE src_modules modules/*.cc modules/*.h)
+file(GLOB src_modules modules/*.cc modules/*.h)
 file(GLOB_RECURSE src_utils utils/*.cc utils/*.h)
 file(GLOB_RECURSE src_vars vars/*.cc vars/*.h)
 add_executable(${CMAKE_PROJECT_NAME} Main.cc ${src_bot} ${src_managers} ${src_modules} ${src_utils} ${src_vars})
 add_dependencies(${CMAKE_PROJECT_NAME} ${BOT_DEPENDENCIES})
+
+target_compile_options(${CMAKE_PROJECT_NAME} PUBLIC -Wno-overloaded-virtual)
 
 include_directories(bot managers modules utils vars ${PROJECT_BINARY_DIR}/src/utils)
 
@@ -42,6 +44,7 @@ pkg_check_modules(LIBSQLITE3 sqlite3)
 include_directories(${LIBSQLITE3_INCLUDE_DIRS})
 
 add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/libs)
+add_subdirectory(${CMAKE_CURRENT_SOURCE_DIR}/modules)
 link_directories(${CMAKE_BINARY_DIR}/bin)
 
 find_package(Threads REQUIRED)

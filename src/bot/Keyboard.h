@@ -1,5 +1,5 @@
-#ifndef LMB_BOT_KEYBOARD_H_GUARD
-#define LMB_BOT_KEYBOARD_H_GUARD
+#ifndef LMBOT_BOT_KEYBOARD_H_GUARD
+#define LMBOT_BOT_KEYBOARD_H_GUARD
 
 #include <string>
 #include <vector>
@@ -7,7 +7,7 @@
 
 #include <tgbot/tgbot.h>
 
-namespace lmb
+namespace lmbot
 {
     namespace bot
     {
@@ -30,6 +30,6 @@ namespace lmb
         };
 
     } // namespace bot
-} // namespace lmb
+} // namespace lmbot
 
 #endif

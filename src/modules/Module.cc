@@ -2,22 +2,26 @@
 
 #include "LMBot.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace modules
     {
-        void Module::process(TgBot::Message::Ptr message)
+        void Module::init(std::shared_ptr<LMBot> bot)
         {
-            spdlog::get("main")->warn("Function to process MESSAGE is not implemented in derived module class");
+            this->bot = bot;
         }
-        void Module::process(TgBot::CallbackQuery::Ptr query)
+        void Module::process(TgBot::Message::Ptr message, const std::vector<std::string> &command)
         {
-            spdlog::get("main")->warn("Function to process CALLBACK QUERY is not implemented in derived module class");
+            logger->warn("Function to process MESSAGE is not implemented in derived module class");
         }
-        void Module::process(TgBot::InlineQuery::Ptr query)
+        void Module::process(TgBot::CallbackQuery::Ptr query, const std::vector<std::string> &command)
         {
-            spdlog::get("main")->warn("Function to process INLINE QUERY is not implemented in derived module class");
+            logger->warn("Function to process CALLBACK QUERY is not implemented in derived module class");
+        }
+        void Module::process(TgBot::InlineQuery::Ptr query, const std::vector<std::string> &command)
+        {
+            logger->warn("Function to process INLINE QUERY is not implemented in derived module class");
         }
 
     } // namespace modules
-} // namespace lmb
+} // namespace lmbot

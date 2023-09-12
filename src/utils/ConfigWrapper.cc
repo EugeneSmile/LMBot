@@ -2,10 +2,13 @@
 
 #include <iostream>
 
-namespace lmb
+#include "LMBot.h"
+
+namespace lmbot
 {
     ConfigWrapper::ConfigWrapper(const std::string &config_filename) : filename(config_filename)
     {
+        logger = bot->logger->registerLogger("ConfigWrapper");
         try
         {
             config = toml::parse_file(config_filename);
@@ -13,7 +16,7 @@ namespace lmb
         }
         catch (const toml::parse_error &error)
         {
-            spdlog::get("main")->error("Config parse error: {} / {}", error.what(), error.description());
+            logger->error("Config parse error: {} / {}", error.what(), error.description());
         }
     }
 
@@ -85,12 +88,12 @@ namespace lmb
                     }
                     else
                     {
-                        spdlog::get("main")->debug("Key {} is non-homogeneous array", full_key);
+                        logger->debug("Key {} is non-homogeneous array", full_key);
                     }
                 }
                 else
                 {
-                    spdlog::get("main")->debug("Key {} is EMPTY non-homogeneous array", full_key);
+                    logger->debug("Key {} is EMPTY non-homogeneous array", full_key);
                 }
                 break;
 
@@ -115,4 +118,4 @@ namespace lmb
             }
         }
     }
-} // namespace lmb
+} // namespace lmbot

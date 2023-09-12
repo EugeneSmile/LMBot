@@ -1,5 +1,5 @@
-#ifndef LMB_MANAGERS_PROCESSOR_H_GUARD
-#define LMB_MANAGERS_PROCESSOR_H_GUARD
+#ifndef LMBOT_MANAGERS_PROCESSOR_H_GUARD
+#define LMBOT_MANAGERS_PROCESSOR_H_GUARD
 
 #include <thread>
 #include <vector>
@@ -9,7 +9,7 @@
 #include "Bot.h"
 #include "Utilities.h"
 
-namespace lmb
+namespace lmbot
 {
     class LMBot;
     namespace managers
@@ -46,6 +46,6 @@ namespace lmb
         };
 
     } // namespace managers
-} // namespace lmb
+} // namespace lmbot
 
 #endif

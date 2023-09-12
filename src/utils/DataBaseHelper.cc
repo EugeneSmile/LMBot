@@ -2,13 +2,16 @@
 
 #include <spdlog/spdlog.h>
 
-namespace lmb
+#include "LMBot.h"
+
+namespace lmbot
 {
     DataBaseHelper::DataBaseHelper(const std::string &db_filename)
     {
+        bot->logger->registerLogger("DBHelper");
         if (sqlite3_open(db_filename.c_str(), &database))
         {
-            spdlog::get("main")->error("Can't open database: {}", sqlite3_errmsg(database));
+            logger->error("Can't open database: {}", sqlite3_errmsg(database));
         }
         processCommand("PRAGMA synchronous = OFF");
         processCommand("PRAGMA journal_mode = MEMORY");
@@ -27,7 +30,7 @@ namespace lmb
         return_code = sqlite3_exec(database, command.c_str(), 0, 0, &sql_error);
         if (return_code)
         {
-            spdlog::get("main")->error("SQL Error: Code: {}, Text: {}, Command: {}", return_code, std::string(sql_error), command);
+            logger->error("SQL Error: Code: {}, Text: {}, Command: {}", return_code, std::string(sql_error), command);
         }
         return return_code;
     }
@@ -71,8 +74,8 @@ namespace lmb
         if (return_code)
         {
             char *sql_error = 0;
-            spdlog::get("main")->error("SQLite return code: {}, sql_error: {}", return_code, sql_error);
+            logger->error("SQLite return code: {}, sql_error: {}", return_code, sql_error);
         }
     }
 
-} // namespace lmb
+} // namespace lmbot

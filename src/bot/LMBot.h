@@ -1,5 +1,5 @@
-#ifndef LMB_BOT_LMB_H_GUARD
-#define LMB_BOT_LMB_H_GUARD
+#ifndef LMBOT_BOT_LMBOT_H_GUARD
+#define LMBOT_BOT_LMBOT_H_GUARD
 
 #include <string>
 #include <memory>
@@ -17,6 +17,8 @@
 #include "Command.h"
 #include "CallbackQuery.h"
 #include "InlineQuery.h"
+#include "ChatHelper.h"
+#include "Modules.h"
 
 // Utils
 #include "Authorizer.h"
@@ -25,14 +27,10 @@
 #include "Version.h"
 #include "Logger.h"
 
-// Modules
-#include "ChatHelper.h"
-#include "AnimationConverter.h"
-
 // Vars
-#include "CommandsList.h"
+#include "BaseCommandsList.h"
 
-namespace lmb
+namespace lmbot
 {
 
     class LMBot : public std::enable_shared_from_this<LMBot>
@@ -55,13 +53,14 @@ namespace lmb
             std::shared_ptr<managers::Command> command;
             std::shared_ptr<managers::CallbackQuery> callback_query;
             std::shared_ptr<managers::InlineQuery> inline_query;
+            std::shared_ptr<managers::ChatHelper> chat_helper;
+            std::shared_ptr<managers::Modules> modules;
         };
 
-        struct Modules
-        {
-            std::shared_ptr<modules::ChatHelper> chat_helper;
-            std::shared_ptr<modules::AnimationConverter> animation_converter;
-        };
+        /*         struct Modules
+                {
+                    std::shared_ptr<modules::AnimationConverter> animation_converter;
+                }; */
 
         bool enabled = true;
         std::shared_ptr<cxxopts::ParseResult> arguments;
@@ -72,7 +71,7 @@ namespace lmb
 
         std::shared_ptr<TgData> data;
         std::shared_ptr<Managers> managers;
-        std::shared_ptr<Modules> modules;
+        //        std::shared_ptr<Modules> modules;
 
         std::shared_ptr<LMBot> getPointer();
         [[nodiscard]] static std::shared_ptr<LMBot> create(std::shared_ptr<cxxopts::ParseResult> args);
@@ -81,5 +80,5 @@ namespace lmb
         void stop();
     };
 
-} // namespace lmb
+} // namespace lmbot
 #endif

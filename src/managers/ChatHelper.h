@@ -1,5 +1,5 @@
-#ifndef LMB_MODULES_CHATHELPER_H_GUARD
-#define LMB_MODULES_CHATHELPER_H_GUARD
+#ifndef LMBOT_MANAGERS_CHATHELPER_H_GUARD
+#define LMBOT_MANAGERS_CHATHELPER_H_GUARD
 
 #include <string>
 #include <vector>
@@ -9,15 +9,15 @@
 
 #include <tgbot/tgbot.h>
 
-#include "Module.h"
+#include "Bot.h"
 #include "DataBaseHelper.h"
 
-namespace lmb
+namespace lmbot
 {
-    namespace modules
+    namespace managers
     {
 
-        class ChatHelper : public Module
+        class ChatHelper : public bot::Bot
         {
         private:
             std::shared_ptr<DataBaseHelper> database_handler;
@@ -38,7 +38,7 @@ namespace lmb
             void addMessageToCleaner(int64_t chat_id, int32_t message_id);
         };
 
-    } // namespace modules
-} // namespace lmb
+    } // namespace managers
+} // namespace lmbot
 
 #endif

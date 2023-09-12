@@ -4,12 +4,13 @@
 
 #include "LMBot.h"
 
-namespace lmb
+namespace lmbot
 {
-    namespace modules
+    namespace managers
     {
         ChatHelper::ChatHelper()
         {
+            logger = bot->logger->registerLogger("ChatHelper");
             database_handler = std::make_shared<DataBaseHelper>((*bot->arguments)["database_file"].as<std::string>());
             cleaner_sleeptime = bot->config->getParameter("chat_helper.cleaner_sleeptime", 30);
             cleaner_sleeptime_ns = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::seconds(cleaner_sleeptime));
@@ -23,7 +24,7 @@ namespace lmb
         {
             if (!cleaner_thread_active)
             {
-                spdlog::get("main")->info("Starting chat cleaning thread");
+                logger->info("Starting chat cleaning thread");
                 cleaner_thread_active = true;
                 cleaner_thread = std::thread(&ChatHelper::cleanMessages, this);
             }
@@ -31,11 +32,11 @@ namespace lmb
 
         void ChatHelper::stop()
         {
-            spdlog::get("main")->info("Stopping chat cleaning thread...");
+            logger->info("Stopping chat cleaning thread...");
             cleaner_thread_active = false;
             if (cleaner_thread.joinable())
                 cleaner_thread.join();
-            spdlog::get("main")->info("Stopping chat cleaning thread...done");
+            logger->info("Stopping chat cleaning thread...done");
         }
 
         void ChatHelper::cleanMessages()
@@ -49,7 +50,7 @@ namespace lmb
                     std::this_thread::sleep_for(std::chrono::seconds(1));
                     if (!cleaner_thread_active)
                     {
-                        spdlog::get("main")->info("Got break to cleaner, stopping");
+                        logger->info("Got break to cleaner, stopping");
                         break;
                     }
                     timeout = std::chrono::high_resolution_clock::now() - timepoint_start;
@@ -65,14 +66,14 @@ namespace lmb
             database_handler->getOutdated(cleaner_sleeptime_ns.count(), messages_to_delete);
             for (std::pair<int64_t, int32_t> &message : messages_to_delete)
             {
-                spdlog::get("main")->info("Cleaning message from chat {} with id {}", message.first, message.second);
+                logger->info("Cleaning message from chat {} with id {}", message.first, message.second);
                 try
                 {
                     bot->tgbot->getApi().deleteMessage(message.first, message.second);
                 }
                 catch (TgBot::TgException &e)
                 {
-                    spdlog::get("main")->error("Cleaner error: {}", e.what());
+                    logger->error("Cleaner error: {}", e.what());
                 }
             }
             database_handler->deleteMessages(messages_to_delete);
@@ -89,6 +90,6 @@ namespace lmb
             database_handler->addMessage(chat_id, message_id);
         }
 
-    } // namespace modules
+    } // namespace managers
 
-} // namespace lmb
+} // namespace lmbot

@@ -1,0 +1,20 @@
+
+file(GLOB src_modules *.cc *.h)
+set(MODULES_LIST "")
+SubDirList(${CMAKE_CURRENT_LIST_DIR} MODULES_LIST)
+
+set(DEPENDENCY_INCLUDES_LIST "")
+foreach(DEPENDENCY IN LISTS BOT_DEPENDENCIES)
+    list(APPEND DEPENDENCY_INCLUDES_LIST $<TARGET_PROPERTY:${DEPENDENCY},INTERFACE_INCLUDE_DIRECTORIES>)    
+endforeach()
+
+foreach(MODULE_DIR IN LISTS MODULES_LIST)
+    message(STATUS "Configuring module ${MODULE_DIR}")
+    file(GLOB_RECURSE src_${MODULE_DIR} ${MODULE_DIR}/*.cc ${MODULE_DIR}/*.h)
+    add_library(${MODULE_DIR} SHARED ${src_${MODULE_DIR}} ${src_modules})
+#    add_dependencies(${MODULE_DIR} ${BOT_DEPENDENCIES})
+    include_directories(${CMAKE_CURRENT_LIST_DIR} ${MODULE_DIR})
+    target_include_directories(${MODULE_DIR} PRIVATE ${DEPENDENCY_INCLUDES_LIST})
+    target_compile_options(${MODULE_DIR} PUBLIC -Wno-overloaded-virtual -Wno-delete-non-virtual-dtor)
+    set_target_properties(${MODULE_DIR} PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Modules")
+endforeach()

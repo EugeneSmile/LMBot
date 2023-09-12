@@ -5,48 +5,49 @@
 #include "LMBot.h"
 #include "Utilities.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace managers
     {
         void Message::handleText(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved text message: {}", message->text);
+            bot->logger->log()->info("Recieved text message: {}", message->text);
         }
 
         void Message::handlePicture(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved picture");
+            bot->logger->log()->info("Recieved picture");
         }
 
         void Message::handleVideo(const TgBot::Message::Ptr message)
         {
-            bot->modules->animation_converter->processMessage(message);
+            bot->logger->log()->info("Recieved video");
+            // bot->modules->animation_converter->processMessage(message);
         }
 
         void Message::handleAudio(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved audio");
+            bot->logger->log()->info("Recieved audio");
         }
 
         void Message::handleVoice(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved voice");
+            bot->logger->log()->info("Recieved voice");
         }
 
         void Message::handleSticker(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved sticker");
+            bot->logger->log()->info("Recieved sticker");
         }
 
         void Message::handleAnimation(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved animation");
+            bot->logger->log()->info("Recieved animation");
         }
 
         void Message::handleDocument(const TgBot::Message::Ptr message)
         {
-            spdlog::get("main")->info("Recieved document");
+            bot->logger->log()->info("Recieved document");
         }
 
         void Message::process(const TgBot::Message::Ptr message)
@@ -74,4 +75,4 @@ namespace lmb
                 handleDocument(message);
         }
     } // namespace managers
-} // namespace lmb
+} // namespace lmbot

@@ -1,6 +1,6 @@
 #include "Utilities.h"
 
-namespace lmb
+namespace lmbot
 {
     std::string downloadFile(std::shared_ptr<TgBot::Bot> bot, std::string file_id)
     {
@@ -36,4 +36,4 @@ namespace lmb
         }
         return true;
     }
-} // namespace lmb
+} // namespace lmbot

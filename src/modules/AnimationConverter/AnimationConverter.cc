@@ -2,22 +2,53 @@
 
 #include "LMBot.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace modules
     {
-
-        AnimationConverter::AnimationConverter()
+        extern "C"
         {
+            Module *allocator()
+            {
+                return new AnimationConverter();
+            }
+
+            void deleter(Module *ptr)
+            {
+                delete ptr;
+            }
+        }
+
+        AnimationConverter::AnimationConverter() : Module("AnimationConverter")
+        {
+            module_commands = {"hello2"};
+            loaded = true;
+        }
+
+        AnimationConverter::~AnimationConverter()
+        {
+            loaded = false;
+        }
+
+        void AnimationConverter::hello()
+        {
+            logger->info("Hello from {} Module!", module_name);
+        }
+
+        void AnimationConverter::init(std::shared_ptr<LMBot> bot)
+        {
+            this->bot = bot;
+            logger = bot->logger->registerLogger(module_name);
+
             video_path = bot->config->getParameter("animation_converter.video_path", "AnimationConverter/Videos");
             animation_path = bot->config->getParameter("animation_converter.animation_path", "AnimationConverter/Gifs");
             converter_command = bot->config->getParameter("animation_converter.converter_command", "AnimationConverter/mp42gif.sh");
         }
 
-        void AnimationConverter::processMessage(TgBot::Message::Ptr message)
+        void AnimationConverter::process(const std::vector<std::string> &command, TgBot::Message::Ptr message)
         {
             bot->tgbot->getApi().sendMessage(message->chat->id, "Received video, do conversion to gif");
-            std::string animation_file_path = bot->modules->animation_converter->doConversion(message->video->fileId);
+            std::string animation_file_path = doConversion(message->video->fileId);
             TgBot::InputFile::Ptr animation_file = TgBot::InputFile::fromFile(animation_file_path, "image/gif");
             bot->tgbot->getApi().sendAnimation(message->chat->id, animation_file);
         }
@@ -49,4 +80,4 @@ namespace lmb
         }
 
     } // namespace modules
-} // namespace lmb
+} // namespace lmbot

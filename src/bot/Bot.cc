@@ -1,12 +1,12 @@
 #include "Bot.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace bot
     {
-        void Bot::init(std::shared_ptr<lmb::LMBot> bot)
+        void Bot::init(std::shared_ptr<lmbot::LMBot> bot)
         {
             Bot::bot = bot;
         }
     } // namespace bot
-} // namespace lmb
+} // namespace lmbot

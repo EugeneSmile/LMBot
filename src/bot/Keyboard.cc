@@ -1,6 +1,6 @@
 #include "Keyboard.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace bot
     {
@@ -65,4 +65,4 @@ namespace lmb
         }
 
     } // namespace bot
-} // namespace lmb
+} // namespace lmbot

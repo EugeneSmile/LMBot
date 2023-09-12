@@ -1,5 +1,5 @@
-#ifndef LMB_BOT_AUTHORIZER_H_GUARD
-#define LMB_BOT_AUTHORIZER_H_GUARD
+#ifndef LMBOT_BOT_AUTHORIZER_H_GUARD
+#define LMBOT_BOT_AUTHORIZER_H_GUARD
 
 #include <cstdint>
 #include <vector>
@@ -7,7 +7,7 @@
 
 #include "Bot.h"
 
-namespace lmb
+namespace lmbot
 {
     class LMBot;
     namespace bot
@@ -44,6 +44,6 @@ namespace lmb
         };
 
     } // namespace bot
-} // namespace lmb
+} // namespace lmbot
 
 #endif

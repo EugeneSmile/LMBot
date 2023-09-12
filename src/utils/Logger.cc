@@ -1,36 +1,40 @@
 #include "Logger.h"
 
-#include <vector>
-
-#include <spdlog/async.h>
-#include <spdlog/sinks/stdout_color_sinks.h>
-#include <spdlog/sinks/rotating_file_sink.h>
-
-namespace lmb
+namespace lmbot
 {
     Logger::Logger()
     {
         spdlog::init_thread_pool(8192, 1);
-        std::vector<spdlog::sink_ptr> sinks;
         sinks.push_back(std::make_shared<spdlog::sinks::stdout_color_sink_mt>());
         sinks.push_back(std::make_shared<spdlog::sinks::rotating_file_sink_mt>("logs/lmbot.log", 1048576 * 5, 10, false));
-        combined_logger = std::make_shared<spdlog::async_logger>("main", begin(sinks), end(sinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
-        spdlog::register_logger(combined_logger);
-
+        registerLogger("Logger");
+        registerLogger(LOGGER_MAIN_NAME);
         spdlog::flush_every(std::chrono::seconds(10));
-
-        combined_logger->info("LMBot start");
-        combined_logger->info("Logger: Initialized");
+        loggers["Logger"]->info("Initialized");
     }
 
     Logger::~Logger()
     {
-        combined_logger->info("Logger: Stopping");
+        loggers["Logger"]->info("Stopping");
     }
 
-    void Logger::flush()
+    std::shared_ptr<spdlog::async_logger> Logger::registerLogger(const std::string &name)
     {
-        combined_logger->flush();
+        if (loggers.find(name) == loggers.end())
+        {
+            auto logger = std::make_shared<spdlog::async_logger>(name, begin(sinks), end(sinks), spdlog::thread_pool(), spdlog::async_overflow_policy::block);
+            logger->set_pattern("[%d/%m/%Y %H:%M:%S.%e] [%^%l%$] [%n] %v");
+            loggers[name] = logger;
+            spdlog::register_logger(logger);
+
+            loggers["Logger"]->info("Registred logger {}", name);
+        }
+        return loggers[name];
     }
 
-} // namespace lmb
+    void Logger::flush(const std::string &name)
+    {
+        loggers[name]->flush();
+    }
+
+} // namespace lmbot

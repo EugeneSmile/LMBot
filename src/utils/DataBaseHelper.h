@@ -1,5 +1,5 @@
-#ifndef LMB_DATABASEHELPER_H_GUARD
-#define LMB_DATABASEHELPER_H_GUARD
+#ifndef LMBOT_DATABASEHELPER_H_GUARD
+#define LMBOT_DATABASEHELPER_H_GUARD
 
 #include <iostream>
 #include <chrono>
@@ -8,9 +8,11 @@
 
 #include <sqlite3.h>
 
-namespace lmb
+#include "Bot.h"
+
+namespace lmbot
 {
-    class DataBaseHelper
+    class DataBaseHelper : public bot::Bot
     {
     private:
         int processCommand(const std::string &command);
@@ -26,5 +28,5 @@ namespace lmb
         static int getOutdatedMessagesCallback(void *data, int argc, char **argv, char **azColName);
     };
 
-} // namespace lmb
+} // namespace lmbot
 #endif

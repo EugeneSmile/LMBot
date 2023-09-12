@@ -1,15 +1,14 @@
-#ifndef LMB_MODULES_ANIMATIONCONVERTER_H_GUARD
-#define LMB_MODULES_ANIMATIONCONVERTER_H_GUARD
+#ifndef LMBOT_MODULES_ANIMATIONCONVERTER_ANIMATIONCONVERTER_H_GUARD
+#define LMBOT_MODULES_ANIMATIONCONVERTER_ANIMATIONCONVERTER_H_GUARD
 
 #include <fstream>
 #include <chrono>
 #include <ctime>
-#include <tgbot/tgbot.h>
 
 #include "Module.h"
 #include "Utilities.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace modules
     {
@@ -23,14 +22,17 @@ namespace lmb
             const std::string video_extention = ".mp4";
             const std::string animation_extention = ".gif";
             bool in_process = false;
+            const std::string doConversion(const std::string &video_file_id);
 
         public:
-            explicit AnimationConverter();
-            const std::string doConversion(const std::string &video_file_id);
-            void processMessage(TgBot::Message::Ptr message);
+            AnimationConverter();
+            ~AnimationConverter();
+            void hello();
+            void init(std::shared_ptr<LMBot> bot);
+            void process(const std::vector<std::string> &command, TgBot::Message::Ptr message);
         };
 
     } // namespace modules
-} // namespace lmb
+} // namespace lmbot
 
 #endif

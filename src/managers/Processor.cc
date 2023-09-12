@@ -4,24 +4,25 @@
 
 #include "LMBot.h"
 
-namespace lmb
+namespace lmbot
 {
     namespace managers
     {
         Processor::Processor()
         {
-            spdlog::get("main")->info("Process manager: Initializing");
+            logger = bot->logger->registerLogger("Processor");
+            logger->info("Initializing");
             threads_limit = bot->config->getParameter("general.threads_limit", 16);
             thread_wait_limit = bot->config->getParameter("general.thread_wait_limit", 30);
 
-            spdlog::get("main")->info("Process manager: Prepare threads");
+            logger->info("Prepare threads");
             threads.resize(threads_limit);
 
-            spdlog::get("main")->info("Process manager: Setting message handlers");
+            logger->info("Setting message handlers");
             bot->tgbot->getEvents().onAnyMessage(std::bind(&Processor::processMessage, this, std::placeholders::_1));
             bot->tgbot->getEvents().onCallbackQuery(std::bind(&Processor::processCallbackQuery, this, std::placeholders::_1));
             bot->tgbot->getEvents().onInlineQuery(std::bind(&Processor::processInlineQuery, this, std::placeholders::_1));
-            spdlog::get("main")->info("Process manager: Initialization done");
+            logger->info("Initialization done");
         }
 
         void Processor::processMessage(const TgBot::Message::Ptr message)
@@ -70,10 +71,10 @@ namespace lmb
             do
             {
                 if (tries == 1)
-                    spdlog::get("main")->warn("All threads busy, waiting for free thread");
+                    logger->warn("All threads busy, waiting for free thread");
                 if (tries > thread_wait_limit)
                 {
-                    spdlog::get("main")->warn("Unable to find free thread after time limit, stop procedure");
+                    logger->warn("Unable to find free thread after time limit, stop procedure");
                     return false;
                 }
                 std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -97,12 +98,12 @@ namespace lmb
                 }
                 catch (const std::exception &e)
                 {
-                    spdlog::get("main")->error("Process manager message exception: {}", e.what());
+                    logger->error("Process manager message exception: {}", e.what());
                 }
             }
             else
             {
-                spdlog::get("main")->warn("Got message from unknown user with id: {}, first name: {} last name: {}, username: {}, user is {}a bot", message->from->id, message->from->firstName, message->from->lastName, message->from->username, (message->from->isBot ? "" : "not "));
+                logger->warn("Got message from unknown user with id: {}, first name: {} last name: {}, username: {}, user is {}a bot", message->from->id, message->from->firstName, message->from->lastName, message->from->username, (message->from->isBot ? "" : "not "));
             }
             std::find_if(threads.begin(), threads.end(), [&](const ThreadData &data)
                          { return data.id == std::this_thread::get_id(); })
@@ -119,7 +120,7 @@ namespace lmb
                 }
                 catch (const std::exception &e)
                 {
-                    spdlog::get("main")->error("Process manager callback query exception: {}", e.what());
+                    logger->error("Process manager callback query exception: {}", e.what());
                 }
             }
             else
@@ -141,7 +142,7 @@ namespace lmb
                 }
                 catch (const std::exception &e)
                 {
-                    spdlog::get("main")->error("Process manager inline query exception: {}", e.what());
+                    logger->error("Process manager inline query exception: {}", e.what());
                 }
             }
             else
@@ -167,4 +168,4 @@ namespace lmb
         }
 
     } // namespace managers
-} // namespace lmb
+} // namespace lmbot
